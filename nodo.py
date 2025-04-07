@@ -1,3 +1,4 @@
+from DatoPolinomio import DatoPolinomio
 class Nodo:
     def __init__(self, dato: DatoPolinomio):
         self.termino = dato
