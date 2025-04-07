@@ -95,3 +95,44 @@ class Polinomio:
             actual = actual.siguiente
 
         return " + ".join(partes)
+        def restar(self, otro):
+            resultado = Polinomio()
+            actual = self.primero
+
+            while actual:
+                coef = actual.termino.coeficiente
+                exp = actual.termino.exponente
+                resultado.cargar_termino(coef, exp)
+                actual = actual.siguiente
+
+            actual = otro.primero
+            while actual:
+                coef = -actual.termino.coeficiente
+                exp = actual.termino.exponente
+                resultado.cargar_termino(resultado.obtener_valor(exp) + coef, exp)
+                actual = actual.siguiente
+
+            return resultado
+
+        def dividir(self, otro):
+            if otro.primero is None:
+                raise ValueError("No se puede dividir por un polinomio nulo")
+
+            cociente = Polinomio()
+            dividendo = Polinomio()
+            actual = self.primero
+
+            while actual:
+                dividendo.cargar_termino(actual.termino.coeficiente, actual.termino.exponente)
+                actual = actual.siguiente
+
+            while dividendo.primero and dividendo.primero.termino.exponente >= otro.primero.termino.exponente:
+                coef = dividendo.primero.termino.coeficiente / otro.primero.termino.coeficiente
+                exp = dividendo.primero.termino.exponente - otro.primero.termino.exponente
+                termino = Polinomio()
+                termino.cargar_termino(coef, exp)
+                cociente.cargar_termino(coef, exp)
+                resto = otro.multiplicar(termino)
+                dividendo = dividendo.restar(resto)
+
+            return cociente
